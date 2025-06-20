@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İlanlar - Kulu Emlak Pazarı</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            background: #f4f8fb;
+            margin: 0;
+            padding: 0;
+            color: #222;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 1rem;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 2.5rem;
+            font-weight: 700;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+        .ilan-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,62,80,0.10);
+            padding: 2.2rem 1.5rem 1.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .ilan-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(120deg, #ffb300 0%, #ff6b00 100%);
+            opacity: 0;
+            z-index: 0;
+            transition: opacity 0.3s;
+        }
+        .ilan-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 16px 40px rgba(255,107,0,0.18);
+        }
+        .ilan-card:hover::before {
+            opacity: 0.13;
+        }
+        .ilan-card:hover .ilan-icon {
+            color: #ff6b00;
+            transform: scale(1.18) rotate(-8deg);
+        }
+        .ilan-card:hover .ilan-title {
+            color: #ff6b00;
+        }
+        .ilan-icon {
+            font-size: 2.8rem;
+            color: #ffb300;
+            margin-bottom: 1.1rem;
+            transition: color 0.3s, transform 0.3s;
+            z-index: 1;
+        }
+        .ilan-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.7rem;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+            z-index: 1;
+        }
+        .ilan-desc {
+            font-size: 1rem;
+            color: #555;
+            text-align: center;
+            z-index: 1;
+        }
+        @media (max-width: 700px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div style="width:100%;text-align:center;margin-top:2rem;margin-bottom:1.5rem;">
+        <a href="index.html" style="display:inline-block;padding:0.7rem 2.2rem;background:linear-gradient(90deg,#ffb300,#ff6b00);color:#fff;font-weight:600;border-radius:24px;text-decoration:none;box-shadow:0 2px 8px rgba(255,107,0,0.10);font-size:1.1rem;transition:background 0.2s,transform 0.2s;">
+            <i class="fas fa-home" style="margin-right:0.5rem;"></i>Ana Sayfa'ya Dön
+        </a>
+    </div>
+    <div class="container">
+        <h1>İlan Kategorileri</h1>
+        <div class="cards">
+            <a href="satilik-evler.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-home ilan-icon"></i>
+                <div class="ilan-title">Satılık Evler</div>
+                <div class="ilan-desc">Hayalinizdeki evi bulun, modern ve güvenli yaşam alanları.</div>
+            </a>
+            <a href="satilik-arsalar.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-map-marked-alt ilan-icon"></i>
+                <div class="ilan-title">Satılık Arsalar</div>
+                <div class="ilan-desc">Yatırımlık ve imarlı arsalar ile geleceğe yatırım yapın.</div>
+            </a>
+            <a href="satilik-isyerleri.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-store ilan-icon"></i>
+                <div class="ilan-title">Satılık İşyerleri</div>
+                <div class="ilan-desc">İşinizi büyütecek merkezi ve avantajlı işyerleri.</div>
+            </a>
+            <a href="satilik-tarlalar.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-tractor ilan-icon"></i>
+                <div class="ilan-title">Satılık Tarla</div>
+                <div class="ilan-desc">Verimli tarlalar ile tarımsal yatırım fırsatları.</div>
+            </a>
+            <a href="kiralik-evler.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-key ilan-icon"></i>
+                <div class="ilan-title">Kiralık Evler</div>
+                <div class="ilan-desc">Farklı bütçelere uygun, konforlu kiralık ev seçenekleri.</div>
+            </a>
+            <a href="kiralik-arsalar.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-map ilan-icon"></i>
+                <div class="ilan-title">Kiralık Arsalar</div>
+                <div class="ilan-desc">Kiralık arsa seçenekleri ile projelerinize alan yaratın.</div>
+            </a>
+            <a href="kiralik-isyerleri.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-briefcase ilan-icon"></i>
+                <div class="ilan-title">Kiralık İşyerleri</div>
+                <div class="ilan-desc">İşinizi başlatmak için uygun kiralık işyeri alternatifleri.</div>
+            </a>
+            <a href="kiralik-tarlalar.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-seedling ilan-icon"></i>
+                <div class="ilan-title">Kiralık Tarla</div>
+                <div class="ilan-desc">Kiralık tarla seçenekleri ile tarımsal faaliyetlerinize alan açın.</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html> 

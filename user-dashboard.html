@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Paneli - Kulu Emlak</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .ilan-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .ilan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .ilan-image {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .ilan-price {
+            color: #e74c3c;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Kulu Emlak</a>
+            <div class="d-flex">
+                <button class="btn btn-outline-light me-2" onclick="showIlanEkle()">
+                    <i class="fas fa-plus-circle me-1"></i>Yeni İlan
+                </button>
+                <button class="btn btn-outline-light" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt me-1"></i>Çıkış Yap
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Filtreler</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Kategori</label>
+                            <select class="form-select" id="kategoriFilter">
+                                <option value="">Tümü</option>
+                                <option value="Satılık">Satılık</option>
+                                <option value="Kiralık">Kiralık</option>
+                                <option value="Arsa">Arsa</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Fiyat Aralığı</label>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <input type="number" class="form-control" id="minFiyat" placeholder="Min">
+                                </div>
+                                <div class="col-6">
+                                    <input type="number" class="form-control" id="maxFiyat" placeholder="Max">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary w-100" onclick="applyFilters()">
+                            <i class="fas fa-filter me-1"></i>Filtrele
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div id="ilanlarContainer" class="row"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { onAuthStateChanged, signOut } from "firebase/auth";
+        import { auth } from './firebase-config.js';
+
+        const adminEmail = "satoshinakamototokyo42@gmail.com";
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // If not logged in, redirect to home page
+                window.location.href = "/";
+            } else if (user.email === adminEmail) {
+                // If admin, redirect to admin dashboard
+                window.location.href = "/admin-dashboard.html";
+            }
+        });
+
+        window.handleLogout = async () => {
+            try {
+                await signOut(auth);
+                window.location.href = "/";
+            } catch (error) {
+                console.error("Çıkış yapılırken hata oluştu:", error);
+            }
+        };
+
+        // Fetch user's listings
+        async function fetchUserListings() {
+            try {
+                const response = await fetch('http://localhost:3001/api/ilanlar?onayli=1');
+                const ilanlar = await response.json();
+                displayListings(ilanlar);
+            } catch (error) {
+                console.error('İlanlar yüklenirken hata:', error);
+            }
+        }
+
+        function displayListings(ilanlar) {
+            const container = document.getElementById('ilanlarContainer');
+            container.innerHTML = ilanlar.map(ilan => `
+                <div class="col-md-4">
+                    <div class="ilan-card">
+                        <img src="${ilan.media ? `http://localhost:3001/uploads/${ilan.media.split(',')[0]}` : 'https://via.placeholder.com/300x200'}" 
+                             class="ilan-image" alt="${ilan.baslik}">
+                        <div class="card-body">
+                            <h5 class="card-title">${ilan.baslik}</h5>
+                            <p class="ilan-price">${ilan.fiyat.toLocaleString()} TL</p>
+                            <p class="card-text">
+                                <i class="fas fa-map-marker-alt me-1"></i>${ilan.ilce || 'Belirtilmemiş'} ${ilan.mahalle ? `- ${ilan.mahalle}` : ''}
+                            </p>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-primary btn-sm" onclick="showIlanDetay(${ilan.id})">
+                                    <i class="fas fa-eye me-1"></i>Detay
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="silIlan(${ilan.id})">
+                                    <i class="fas fa-trash me-1"></i>Sil
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize the dashboard
+        fetchUserListings();
+    </script>
+</body>
+</html> 

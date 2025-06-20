@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kulu Emlak Pazarı</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #e74c3c;
+            --accent-color: #3498db;
+            --light-bg: #f8f9fa;
+            --dark-bg: #1a1a1a;
+            --gradient-primary: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            --gradient-secondary: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--light-bg);
+            color: var(--primary-color);
+            overflow-x: hidden;
+        }
+
+        /* Modern Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            transition: var(--transition);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: var(--shadow-md);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            position: relative;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: translateY(-3px);
+            color: #ff6b00;
+        }
+
+        .navbar-brand::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover::after {
+            transform: scaleX(1);
+            background: linear-gradient(90deg, #ff6b00, #ff9d00);
+        }
+
+        .navbar-nav .nav-link {
+            color: #1a1a1a;
+            font-weight: 600;
+            padding: 0.5rem 1.2rem;
+            margin: 0 0.3rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-shadow: none;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ff6b00;
+            background: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-nav .nav-link.active {
+            background: #ffffff;
+            color: #ff6b00;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff6b00, #ff9d00);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            width: 80%;
+        }
+
+        .navbar-nav .nav-link i {
+            color: #1a1a1a;
+            margin-right: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover i {
+            color: #ff6b00;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar-nav .nav-link {
+                margin: 0.5rem 0;
+                text-align: center;
+            }
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            background: var(--gradient-primary);
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 60px;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
+            opacity: 0.33;
+            animation: zoomInOut 20s infinite alternate;
+        }
+
+        @keyframes zoomInOut {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+        }
+
+        .hero-title .premium-icon {
+            display: inline-block;
+            margin-right: 15px;
+            font-size: 2.8rem;
+            vertical-align: middle;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .hero-title span {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-top: 0.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 2px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s;
+            animation-fill-mode: both;
+            min-height: 2rem;
+        }
+
+        .premium-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-top: 1rem;
+            position: relative;
+            padding-bottom: 1rem;
+            animation: fadeInUp 1s ease 0.4s;
+            animation-fill-mode: both;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            transition: color 0.3s, transform 0.3s;
+            cursor: pointer;
+        }
+
+        .premium-text:hover {
+            color: #FFD700;
+            transform: translateY(-5px);
+            text-shadow: 0 0 12px #FFD700, 2px 2px 4px rgba(0,0,0,0.15);
+        }
+
+        .premium-text::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+        }
+
+        @keyframes typewriter {
+            0% { width: 0; }
+            80% { width: 100%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        .typewriter-text {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid white;
+            animation: 
+                typewriter 12s steps(120) infinite,
+                blink 0.75s step-end 12;
+            animation-delay: 0s, 12s;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.75), rgba(255, 140, 66, 0.75));
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            border-color: transparent;
+            box-shadow: 0 15px 30px rgba(255, 107, 53, 0.2);
+        }
+
+        .hero-btn:hover::before {
+            opacity: 0.75;
+        }
+
+        .hero-btn i {
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 2;
+            transition: all 0.4s ease;
+        }
+
+        .hero-btn span {
+            position: relative;
+            z-index: 2;
+            transition: all 0.4s ease;
+        }
+
+        .hero-btn:hover i,
+        .hero-btn:hover span {
+            color: #fff;
+        }
+
+        .hero-btn.primary {
+            background: var(--gradient-primary);
+            border: none;
+        }
+
+        .hero-btn.primary:hover {
+            background: linear-gradient(45deg, rgba(255, 107, 53, 0.75), rgba(255, 140, 66, 0.75));
+        }
+
+        /* Modern Search Box */
+        .search-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 1s ease 0.4s;
+            animation-fill-mode: both;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-select, .form-control {
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .form-select:focus, .form-control:focus {
+            box-shadow: var(--shadow-md);
+            background: white;
+        }
+
+        .form-select {
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            height: auto;
+            max-height: 300px;
+        }
+
+        .form-select:focus {
+            box-shadow: var(--shadow-md);
+            background: white;
+        }
+
+        .form-select option {
+            padding: 10px;
+            font-size: 0.95rem;
+        }
+
+        .form-select option:hover {
+            background-color: var(--light-bg);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Categories Section */
+        .categories-section {
+            padding: 80px 0;
+            background: white;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .section-title:hover {
+            transform: translateY(-3px);
+            color: #ff6b00;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            transition: all 0.3s ease;
+        }
+
+        .section-title:hover::after {
+            width: 150px;
+            background: linear-gradient(90deg, transparent, #ff6b00, transparent);
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff6b35, #ff8c42);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+
+        .category-card:hover {
+            transform: translateY(-15px);
+            border-color: transparent;
+            box-shadow: 0 15px 30px rgba(255, 107, 53, 0.2);
+        }
+
+        .category-card:hover::before {
+            opacity: 0.95;
+        }
+
+        .category-card:hover .category-icon {
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        .category-card:hover .category-title {
+            color: #fff;
+        }
+
+        .category-card:hover .category-description {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ff6b35;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .category-description {
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .category-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+            transition: var(--transition);
+        }
+
+        .category-card:hover .category-image {
+            transform: scale(1.05);
+        }
+
+        .category-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            position: relative;
+            z-index: 2;
+        }
+
+        .category-card p {
+            font-size: 1rem;
+            color: #6c757d;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        /* İlan Ver Section */
+        .ilan-ver-section {
+            background: var(--gradient-secondary);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ilan-ver-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
+            opacity: 0.1;
+            animation: zoomInOut 20s infinite alternate;
+        }
+
+        .ilan-ver-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+        }
+
+        .ilan-ver-title {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .ilan-ver-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .ilan-ver-btn {
+            background: white;
+            color: var(--secondary-color);
+            padding: 1rem 3rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            border: none;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ilan-ver-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: var(--transition);
+        }
+
+        .ilan-ver-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .ilan-ver-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-title span {
+                font-size: 1.5rem;
+            }
+
+            .search-box {
+                padding: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .ilan-ver-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">Kulu Emlak Pazarı</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">
+                            <i class="fas fa-home me-1"></i>Ana Sayfa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ilanlar.html">
+                            <i class="fas fa-list me-1"></i>İlanlar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">
+                            <i class="fas fa-info-circle me-1"></i>Hakkımızda
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="iletisim.html">
+                            <i class="fas fa-envelope me-1"></i>İletişim
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-warning px-3 py-1 ms-2" href="ilan-ekle.html" style="font-size: 1rem; font-weight: 600; border-radius: 20px; color: #fff; background: linear-gradient(90deg, #ffb300, #ff6b00); box-shadow: 0 2px 8px rgba(255,107,0,0.10); transition: all 0.2s;">
+                            <i class="fas fa-plus-circle me-1"></i>İlan Ver
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title" data-aos="fade-up">
+                    <i class="fas fa-key premium-icon"></i>
+                Kulu Emlak Pazarı
+                    <span>Hayalinizdeki Evi Bulun</span>
+            </h1>
+                <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">
+                    <span class="typewriter-text">Satılık, Kiralık, Arsa ve Daha Fazlası</span>
+                </p>
+                <div class="premium-text" data-aos="fade-up" data-aos-delay="300">
+                    Premium Real Estate
+                            </div>
+
+                <!-- Hero Buttons -->
+                <div class="hero-buttons" data-aos="fade-up" data-aos-delay="400" style="flex-direction: column; gap: 1.2rem; align-items: center;">
+                    <div class="d-flex flex-wrap justify-content-center gap-3 mb-2">
+                        <a href="satilik-evler.html" class="hero-btn primary">
+                            <i class="fas fa-home"></i>
+                            Satılık Evler
+                        </a>
+                        <a href="satilik-arsalar.html" class="hero-btn">
+                            <i class="fas fa-map-marked-alt"></i>
+                            Satılık Arsalar
+                        </a>
+                        <a href="satilik-isyerleri.html" class="hero-btn">
+                            <i class="fas fa-store"></i>
+                            Satılık İşyerleri
+                        </a>
+                        <a href="satilik-tarlalar.html" class="hero-btn">
+                            <i class="fas fa-tractor"></i>
+                            Satılık Tarla
+                        </a>
+                    </div>
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <a href="kiralik-evler.html" class="hero-btn">
+                            <i class="fas fa-key"></i>
+                            Kiralık Evler
+                        </a>
+                        <a href="kiralik-arsalar.html" class="hero-btn">
+                            <i class="fas fa-map-marked-alt"></i>
+                            Kiralık Arsalar
+                        </a>
+                        <a href="kiralik-isyerleri.html" class="hero-btn">
+                            <i class="fas fa-store"></i>
+                            Kiralık İşyerleri
+                        </a>
+                        <a href="kiralik-tarlalar.html" class="hero-btn">
+                            <i class="fas fa-tractor"></i>
+                            Kiralık Tarla
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Search Box -->
+                <div class="search-box" data-aos="fade-up" data-aos-delay="500">
+                    <form class="row g-3">
+            <div class="col-md-4">
+                            <select class="form-select" id="category">
+                                <option selected>Kategori Seçin</option>
+                                <optgroup label="Kiralık">
+                                    <option value="kiralik-ev">Kiralık Ev</option>
+                                    <option value="kiralik-isyeri">Kiralık İş Yeri</option>
+                                    <option value="kiralik-tarla">Kiralık Tarla</option>
+                                </optgroup>
+                                <optgroup label="Satılık">
+                                    <option value="satilik-ev">Satılık Ev</option>
+                                    <option value="satilik-isyeri">Satılık İş Yeri</option>
+                                    <option value="satilik-arsa">Satılık Arsa</option>
+                                </optgroup>
+                            </select>
+            </div>
+            <div class="col-md-4">
+                            <select class="form-select">
+                                <option selected disabled>Mahalle Seçin</option>
+                                <option value="acikuyu">AÇIKUYU MAHALLESİ</option>
+                                <option value="alparslan">ALPARSLAN MAHALLESİ</option>
+                                <option value="altilar">ALTILAR MAHALLESİ</option>
+                                <option value="arsinci">ARŞINCI MAHALLESİ</option>
+                                <option value="bahadirli">BAHADIRLI MAHALLESİ</option>
+                                <option value="beskardes">BEŞKARDEŞ MAHALLESİ</option>
+                                <option value="bozan">BOZAN MAHALLESİ</option>
+                                <option value="burunagil">BURUNAĞIL MAHALLESİ</option>
+                                <option value="camikebir">CAMİKEBİR MAHALLESİ</option>
+                                <option value="canimana">CANIMANA MAHALLESİ</option>
+                                <option value="celep">CELEP MAHALLESİ</option>
+                                <option value="cumhuriyet">CUMHURİYET MAHALLESİ</option>
+                                <option value="degirmenozu">DEĞİRMENÖZÜ MAHALLESİ</option>
+                                <option value="dinek">DİNEK MAHALLESİ</option>
+                                <option value="dipdede">DİPDEDE MAHALLESİ</option>
+                                <option value="dogutepe">DOĞUTEPE MAHALLESİ</option>
+                                <option value="fatih">FATİH SULTAN MEHMET MAHALLESİ</option>
+                                <option value="fevziye">FEVZİYE MAHALLESİ</option>
+                                <option value="gokler">GÖKLER MAHALLESİ</option>
+                                <option value="guzelyayla">GÜZELYAYLA MAHALLESİ</option>
+                                <option value="hisarkoy">HİSARKÖY MAHALLESİ</option>
+                                <option value="karacadag">KARACADAĞ MAHALLESİ</option>
+                                <option value="karacadere">KARACADERE MAHALLESİ</option>
+                                <option value="karapinar">KARAPINAR MAHALLESİ</option>
+                                <option value="karsiyaka">KARŞIYAKA MAHALLESİ</option>
+                                <option value="kemaliye">KEMALİYE MAHALLESİ</option>
+                                <option value="kirkkuyu">KIRKKUYU MAHALLESİ</option>
+                                <option value="kirkpinar">KIRKPINAR MAHALLESİ</option>
+                                <option value="kozanli">KOZANLI MAHALLESİ</option>
+                                <option value="komusini">KÖMÜŞİNİ MAHALLESİ</option>
+                                <option value="kostengil">KÖSTENGİL MAHALLESİ</option>
+                                <option value="kosker">KÖŞKER MAHALLESİ</option>
+                                <option value="mandira">MANDIRA MAHALLESİ</option>
+                                <option value="omeranli">ÖMERANLI MAHALLESİ</option>
+                                <option value="sariyayla">SARIYAYLA MAHALLESİ</option>
+                                <option value="seyitahmetli">SEYİTAHMETLİ MAHALLESİ</option>
+                                <option value="sogukkuyu">SOĞUKKUYU MAHALLESİ</option>
+                                <option value="serefli">ŞEREFLİ MAHALLESİ</option>
+                                <option value="tavlioren">TAVLIÖREN MAHALLESİ</option>
+                                <option value="tuzyaka">TUZYAKA MAHALLESİ</option>
+                                <option value="yarasli">YARAŞLI MAHALLESİ</option>
+                                <option value="yazicayir">YAZIÇAYIR MAHALLESİ</option>
+                                <option value="yeni">YENİ MAHALLESİ</option>
+                                <option value="yesiltepe">YEŞİLTEPE MAHALLESİ</option>
+                                <option value="yesilyurt">YEŞİLYURT MAHALLESİ</option>
+                                <option value="zincirlikuyu">ZİNCİRLİKUYU MAHALLESİ</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i>Ara
+                                    </button>
+                            </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Kategoriler</h2>
+            <div class="row">
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <a href="satilik-evler.html" class="text-decoration-none">
+                        <div class="category-card">
+                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Modern Ev" class="category-image">
+                            <h3>Satılık Evler</h3>
+                            <p>Hayalinizdeki eve kavuşun</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                    <a href="satilik-arsalar.html" class="text-decoration-none">
+                        <div class="category-card">
+                            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Arsa" class="category-image">
+                            <h3>Satılık Arsalar</h3>
+                            <p>Yatırımlık arsalar</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
+                    <a href="satilik-isyerleri.html" class="text-decoration-none">
+                        <div class="category-card">
+                            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="İş Yeri" class="category-image">
+                            <h3>Satılık İşyerleri</h3>
+                            <p>İşletmeniz için ideal mekanlar</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 offset-md-4 mt-4" data-aos="fade-up" data-aos-delay="800">
+                    <a href="kiralik-evler.html" class="text-decoration-none">
+                        <div class="category-card">
+                            <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Kiralık Ev" class="category-image">
+                            <h3>Kiralık Evler</h3>
+                            <p>Size uygun kiralık evler</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- İlan Ver Section -->
+    <section class="ilan-ver-section">
+        <div class="container">
+            <div class="ilan-ver-content" data-aos="fade-up">
+                <h2 class="ilan-ver-title">İlanınızı Yayınlayın</h2>
+                <p class="ilan-ver-text">Emlak ilanınızı ekleyin, binlerce potansiyel alıcıya ulaşın</p>
+                <a href="ilan-ekle.html" class="btn ilan-ver-btn">
+                    <i class="fas fa-plus-circle me-2"></i>İlan Ver
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Typewriter effect
+        const typewriterText = document.querySelector('.typewriter-text');
+        const text = typewriterText.textContent;
+        typewriterText.textContent = '';
+        let i = 0;
+
+        function typeWriter() {
+            if (i < text.length) {
+                typewriterText.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            } else {
+                // Yazı tamamlandığında imleci kaldır
+                typewriterText.style.borderRight = 'none';
+            }
+        }
+
+        // Start typewriter effect when page loads
+        window.addEventListener('load', typeWriter);
+    </script>
+</body>
+</html> 

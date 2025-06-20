@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İlan Ver - Kulu Emlak</title>
+    <style>
+        :root {
+            --primary-color: #ff6b00;
+            --secondary-color: #ff9d00;
+            --text-color: #333;
+            --light-bg: #f9f9f9;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .category-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .category-card {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 400px;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(255, 107, 0, 0.2);
+            border-color: var(--primary-color);
+            background: linear-gradient(to bottom, #fff5eb, #fff);
+        }
+
+        .category-card:hover i {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .category-card:hover h2 {
+            color: var(--primary-color);
+        }
+
+        .category-card i {
+            font-size: 4rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .category-card h2 {
+            font-size: 2.2rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .subcategory-container {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .subcategory-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 280px;
+            border: 2px solid transparent;
+        }
+
+        .subcategory-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(255, 107, 0, 0.2);
+            border-color: var(--primary-color);
+            background: linear-gradient(to bottom, #fff5eb, #fff);
+        }
+
+        .subcategory-card:hover i {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .subcategory-card:hover h3 {
+            color: var(--primary-color);
+        }
+
+        .subcategory-card i {
+            font-size: 3rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .subcategory-card h3 {
+            font-size: 1.8rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--white);
+            width: 90%;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 10px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.2);
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .info-text {
+            text-align: center;
+            margin-top: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .category-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .category-card {
+                width: 100%;
+                max-width: 400px;
+                padding: 2.5rem;
+            }
+
+            .subcategory-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .subcategory-card {
+                width: 100%;
+                max-width: 280px;
+                padding: 1.8rem;
+            }
+        }
+
+        .ana-sayfa-btn {
+            width: 10%;
+            min-width: 90px;
+            max-width: 140px;
+            border-radius: 22px;
+            padding: 0.4rem 1.2rem;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 2px 10px rgba(255,107,0,0.10);
+            transition: all 0.18s cubic-bezier(.4,2,.6,1);
+            background: #fff;
+            border: 1.5px solid #ff6b00;
+            color: #ff6b00;
+            display: inline-block;
+            text-align: center;
+        }
+        .ana-sayfa-btn:hover {
+            background: #ff6b00;
+            color: #fff;
+            transform: translateY(-2px) scale(1.06);
+            box-shadow: 0 6px 18px rgba(255,107,0,0.18);
+            border-color: #ff9d00;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-bottom: 2rem;">
+            <h1 style="margin: 0;">İlan Ver</h1>
+            <a href="index.html" class="btn btn-outline-primary ana-sayfa-btn">
+                Ana Sayfa
+            </a>
+        </div>
+        
+        <!-- Ana Kategoriler -->
+        <div class="category-container" id="mainCategories">
+            <div class="category-card" data-category="kiralik">
+                <i class="fas fa-key"></i>
+                <h2>Kiralık</h2>
+            </div>
+            <div class="category-card" data-category="satilik">
+                <i class="fas fa-home"></i>
+                <h2>Satılık</h2>
+            </div>
+        </div>
+
+        <!-- Alt Kategoriler -->
+        <div class="subcategory-container" id="subCategories">
+            <div class="subcategory-card" data-subcategory="ev">
+                <i class="fas fa-building"></i>
+                <h3>Ev</h3>
+            </div>
+            <div class="subcategory-card" data-subcategory="arsa">
+                <i class="fas fa-map-marked-alt"></i>
+                <h3>Arsa</h3>
+            </div>
+            <div class="subcategory-card" data-subcategory="isyeri">
+                <i class="fas fa-store"></i>
+                <h3>İşyeri</h3>
+            </div>
+            <div class="subcategory-card" data-subcategory="tarla">
+                <i class="fas fa-tractor"></i>
+                <h3>Tarla</h3>
+            </div>
+        </div>
+
+        <!-- İlan Formu Modal -->
+        <div class="modal" id="ilanModal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>İlan Bilgileri</h2>
+                <form id="ilanForm">
+                    <div class="form-group">
+                        <label for="baslik">İlan Başlığı</label>
+                        <input type="text" id="baslik" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="aciklama">Açıklama</label>
+                        <textarea id="aciklama" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="mahalle">Mahalle</label>
+                        <select id="mahalle" class="form-control" required>
+                            <option value="">Mahalle Seçiniz</option>
+                            <option value="ACIKUYU MAHALLESİ">ACIKUYU MAHALLESİ</option>
+                            <option value="ALPARSLAN MAHALLESİ">ALPARSLAN MAHALLESİ</option>
+                            <option value="ALTILAR MAHALLESİ">ALTILAR MAHALLESİ</option>
+                            <option value="ARŞINCI MAHALLESİ">ARŞINCI MAHALLESİ</option>
+                            <option value="BAHADIRLI MAHALLESİ">BAHADIRLI MAHALLESİ</option>
+                            <option value="BEŞKARDEŞ MAHALLESİ">BEŞKARDEŞ MAHALLESİ</option>
+                            <option value="BOZAN MAHALLESİ">BOZAN MAHALLESİ</option>
+                            <option value="BURUNAĞIL MAHALLESİ">BURUNAĞIL MAHALLESİ</option>
+                            <option value="CAMİKEBİR MAHALLESİ">CAMİKEBİR MAHALLESİ</option>
+                            <option value="CANIMANA MAHALLESİ">CANIMANA MAHALLESİ</option>
+                            <option value="CELEP MAHALLESİ">CELEP MAHALLESİ</option>
+                            <option value="CUMHURİYET MAHALLESİ">CUMHURİYET MAHALLESİ</option>
+                            <option value="DEĞİRMENÖZÜ MAHALLESİ">DEĞİRMENÖZÜ MAHALLESİ</option>
+                            <option value="DİNEK MAHALLESİ">DİNEK MAHALLESİ</option>
+                            <option value="DİPDEDE MAHALLESİ">DİPDEDE MAHALLESİ</option>
+                            <option value="DOĞUTEPE MAHALLESİ">DOĞUTEPE MAHALLESİ</option>
+                            <option value="FATİH SULTAN MEHMET MAHALLESİ">FATİH SULTAN MEHMET MAHALLESİ</option>
+                            <option value="FEVZİYE MAHALLESİ">FEVZİYE MAHALLESİ</option>
+                            <option value="GÖKLER MAHALLESİ">GÖKLER MAHALLESİ</option>
+                            <option value="GÜZELYAYLA MAHALLESİ">GÜZELYAYLA MAHALLESİ</option>
+                            <option value="HİSARKÖY MAHALLESİ">HİSARKÖY MAHALLESİ</option>
+                            <option value="KARACADAĞ MAHALLESİ">KARACADAĞ MAHALLESİ</option>
+                            <option value="KARACADERE MAHALLESİ">KARACADERE MAHALLESİ</option>
+                            <option value="KARAPINAR MAHALLESİ">KARAPINAR MAHALLESİ</option>
+                            <option value="KARŞIYAKA MAHALLESİ">KARŞIYAKA MAHALLESİ</option>
+                            <option value="KEMALİYE MAHALLESİ">KEMALİYE MAHALLESİ</option>
+                            <option value="KIRKKUYU MAHALLESİ">KIRKKUYU MAHALLESİ</option>
+                            <option value="KIRKPINAR MAHALLESİ">KIRKPINAR MAHALLESİ</option>
+                            <option value="KOZANLI MAHALLESİ">KOZANLI MAHALLESİ</option>
+                            <option value="KÖMÜŞİNİ MAHALLESİ">KÖMÜŞİNİ MAHALLESİ</option>
+                            <option value="KÖSTENGİL MAHALLESİ">KÖSTENGİL MAHALLESİ</option>
+                            <option value="KÖŞKER MAHALLESİ">KÖŞKER MAHALLESİ</option>
+                            <option value="MANDIRA MAHALLESİ">MANDIRA MAHALLESİ</option>
+                            <option value="ÖMERANLI MAHALLESİ">ÖMERANLI MAHALLESİ</option>
+                            <option value="SARIYAYLA MAHALLESİ">SARIYAYLA MAHALLESİ</option>
+                            <option value="SEYİTAHMETLİ MAHALLESİ">SEYİTAHMETLİ MAHALLESİ</option>
+                            <option value="SOĞUKKUYU MAHALLESİ">SOĞUKKUYU MAHALLESİ</option>
+                            <option value="ŞEREFLİ MAHALLESİ">ŞEREFLİ MAHALLESİ</option>
+                            <option value="TAVLIÖREN MAHALLESİ">TAVLIÖREN MAHALLESİ</option>
+                            <option value="TUZYAKA MAHALLESİ">TUZYAKA MAHALLESİ</option>
+                            <option value="YARAŞLI MAHALLESİ">YARAŞLI MAHALLESİ</option>
+                            <option value="YAZIÇAYIR MAHALLESİ">YAZIÇAYIR MAHALLESİ</option>
+                            <option value="YENİ MAHALLESİ">YENİ MAHALLESİ</option>
+                            <option value="YEŞİLTEPE MAHALLESİ">YEŞİLTEPE MAHALLESİ</option>
+                            <option value="YEŞİLYURT MAHALLESİ">YEŞİLYURT MAHALLESİ</option>
+                            <option value="ZİNCİRLİKUYU MAHALLESİ">ZİNCİRLİKUYU MAHALLESİ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fiyat">Fiyat (TL)</label>
+                        <input type="number" id="fiyat" class="form-control" required min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefon">Telefon Numarası</label>
+                        <input type="tel" id="telefon" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="resimler">Resim Yükle</label>
+                        <input type="file" id="resimler" class="form-control" multiple accept="image/*">
+                    </div>
+                    <button type="submit" class="btn">İlanı Yayınla</button>
+                    <p class="info-text">İlan uygun görüldüğünde yayına alınacaktır.</p>
+                </form>
+                <div class="success-message" id="successMessage">
+                    Teşekkürler! İlanınız başarıyla alındı.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainCategories = document.getElementById('mainCategories');
+            const subCategories = document.getElementById('subCategories');
+            const ilanModal = document.getElementById('ilanModal');
+            const closeModal = document.querySelector('.close-modal');
+            const ilanForm = document.getElementById('ilanForm');
+            const successMessage = document.getElementById('successMessage');
+            let selectedCategory = '';
+            let selectedSubCategory = '';
+
+            // Ana kategori seçimi
+            mainCategories.addEventListener('click', function(e) {
+                const categoryCard = e.target.closest('.category-card');
+                if (categoryCard) {
+                    selectedCategory = categoryCard.dataset.category;
+                    mainCategories.style.display = 'none';
+                    subCategories.style.display = 'flex';
+                }
+            });
+
+            // Alt kategori seçimi
+            subCategories.addEventListener('click', function(e) {
+                const subCategoryCard = e.target.closest('.subcategory-card');
+                if (subCategoryCard) {
+                    selectedSubCategory = subCategoryCard.dataset.subcategory;
+                    ilanModal.style.display = 'block';
+                }
+            });
+
+            // Modal kapatma
+            closeModal.addEventListener('click', function() {
+                ilanModal.style.display = 'none';
+            });
+
+            // Modal dışına tıklayınca kapatma
+            window.addEventListener('click', function(e) {
+                if (e.target === ilanModal) {
+                    ilanModal.style.display = 'none';
+                }
+            });
+
+            // Form gönderimi
+            ilanForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    kategori: selectedCategory,
+                    altKategori: selectedSubCategory,
+                    baslik: document.getElementById('baslik').value,
+                    aciklama: document.getElementById('aciklama').value,
+                    mahalle: document.getElementById('mahalle').value,
+                    fiyat: document.getElementById('fiyat').value,
+                    telefon: document.getElementById('telefon').value,
+                    resimler: document.getElementById('resimler').files
+                };
+
+                // Console'a yazdırma (simülasyon)
+                console.log('İlan Bilgileri:', formData);
+
+                // Formu gizle ve başarı mesajını göster
+                ilanForm.style.display = 'none';
+                successMessage.style.display = 'block';
+
+                // 3 saniye sonra modalı kapat
+                setTimeout(() => {
+                    ilanModal.style.display = 'none';
+                    successMessage.style.display = 'none';
+                    ilanForm.style.display = 'block';
+                    ilanForm.reset();
+                    mainCategories.style.display = 'flex';
+                    subCategories.style.display = 'none';
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html> 

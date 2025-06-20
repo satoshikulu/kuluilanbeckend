@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satılık İşyerleri - Kulu Emlak Pazarı</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #e74c3c;
+            --accent-color: #3498db;
+            --light-bg: #f8f9fa;
+            --dark-bg: #1a1a1a;
+            --gradient-primary: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            --gradient-secondary: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--light-bg);
+            color: var(--primary-color);
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .navbar-brand {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--primary-color);
+            margin: 0 0.5rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: var(--gradient-primary);
+            padding: 100px 0 50px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
+            opacity: 0.1;
+        }
+
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Property Card */
+        .property-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            margin-bottom: 30px;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .property-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .property-content {
+            padding: 1.5rem;
+        }
+
+        .property-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .property-location {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .property-features {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .property-price {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .property-btn {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
+            border: none;
+            width: 100%;
+            text-align: center;
+        }
+
+        .property-btn:hover {
+            background: var(--gradient-secondary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Filters */
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 30px;
+        }
+
+        .filter-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .form-select, .form-control {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 0.75rem;
+        }
+
+        .form-select:focus, .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Kulu Emlak Pazarı</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Ana Sayfa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="satilik-evler.html">Satılık Evler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="satilik-arsalar.html">Satılık Arsalar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="satilik-isyerleri.html">Satılık İşyerleri</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="kiralik-evler.html">Kiralık Evler</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1 class="page-title" data-aos="fade-up">Satılık İşyerleri</h1>
+            <p class="page-subtitle" data-aos="fade-up" data-aos-delay="200">
+                İşinizi büyütmek için ideal mekanlar
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        <div class="row">
+            <!-- Filters -->
+            <div class="col-lg-3">
+                <div class="filters" data-aos="fade-right">
+                    <h3 class="filter-title">Filtreler</h3>
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Fiyat Aralığı</label>
+                            <select class="form-select">
+                                <option selected>Tümü</option>
+                                <option>0 - 1.000.000 TL</option>
+                                <option>1.000.000 - 2.000.000 TL</option>
+                                <option>2.000.000 - 5.000.000 TL</option>
+                                <option>5.000.000 TL ve üzeri</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mahalle</label>
+                            <select class="form-select">
+                                <option selected>Tümü</option>
+                                <option value="acikuyu">AÇIKUYU MAHALLESİ</option>
+                                <option value="alparslan">ALPARSLAN MAHALLESİ</option>
+                                <option value="altilar">ALTILAR MAHALLESİ</option>
+                                <option value="arsinci">ARŞINCI MAHALLESİ</option>
+                                <option value="bahadirli">BAHADIRLI MAHALLESİ</option>
+                                <option value="beskardes">BEŞKARDEŞ MAHALLESİ</option>
+                                <option value="bozan">BOZAN MAHALLESİ</option>
+                                <option value="burunagil">BURUNAĞIL MAHALLESİ</option>
+                                <option value="camikebir">CAMİKEBİR MAHALLESİ</option>
+                                <option value="canimana">CANIMANA MAHALLESİ</option>
+                                <option value="celep">CELEP MAHALLESİ</option>
+                                <option value="cumhuriyet">CUMHURİYET MAHALLESİ</option>
+                                <option value="degirmenozu">DEĞİRMENÖZÜ MAHALLESİ</option>
+                                <option value="dinek">DİNEK MAHALLESİ</option>
+                                <option value="dipdede">DİPDEDE MAHALLESİ</option>
+                                <option value="dogutepe">DOĞUTEPE MAHALLESİ</option>
+                                <option value="fatih">FATİH SULTAN MEHMET MAHALLESİ</option>
+                                <option value="fevziye">FEVZİYE MAHALLESİ</option>
+                                <option value="gokler">GÖKLER MAHALLESİ</option>
+                                <option value="guzelyayla">GÜZELYAYLA MAHALLESİ</option>
+                                <option value="hisarkoy">HİSARKÖY MAHALLESİ</option>
+                                <option value="karacadag">KARACADAĞ MAHALLESİ</option>
+                                <option value="karacadere">KARACADERE MAHALLESİ</option>
+                                <option value="karapinar">KARAPINAR MAHALLESİ</option>
+                                <option value="karsiyaka">KARŞIYAKA MAHALLESİ</option>
+                                <option value="kemaliye">KEMALİYE MAHALLESİ</option>
+                                <option value="kirkkuyu">KIRKKUYU MAHALLESİ</option>
+                                <option value="kirkpinar">KIRKPINAR MAHALLESİ</option>
+                                <option value="kozanli">KOZANLI MAHALLESİ</option>
+                                <option value="komusini">KÖMÜŞİNİ MAHALLESİ</option>
+                                <option value="kostengil">KÖSTENGİL MAHALLESİ</option>
+                                <option value="kosker">KÖŞKER MAHALLESİ</option>
+                                <option value="mandira">MANDIRA MAHALLESİ</option>
+                                <option value="omeranli">ÖMERANLI MAHALLESİ</option>
+                                <option value="sariyayla">SARIYAYLA MAHALLESİ</option>
+                                <option value="seyitahmetli">SEYİTAHMETLİ MAHALLESİ</option>
+                                <option value="sogukkuyu">SOĞUKKUYU MAHALLESİ</option>
+                                <option value="serefli">ŞEREFLİ MAHALLESİ</option>
+                                <option value="tavlioren">TAVLIÖREN MAHALLESİ</option>
+                                <option value="tuzyaka">TUZYAKA MAHALLESİ</option>
+                                <option value="yarasli">YARAŞLI MAHALLESİ</option>
+                                <option value="yazicayir">YAZIÇAYIR MAHALLESİ</option>
+                                <option value="yeni">YENİ MAHALLESİ</option>
+                                <option value="yesiltepe">YEŞİLTEPE MAHALLESİ</option>
+                                <option value="yesilyurt">YEŞİLYURT MAHALLESİ</option>
+                                <option value="zincirlikuyu">ZİNCİRLİKUYU MAHALLESİ</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">İşyeri Tipi</label>
+                            <select class="form-select">
+                                <option selected>Tümü</option>
+                                <option>Dükkan</option>
+                                <option>Ofis</option>
+                                <option>Depo</option>
+                                <option>Plaza</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Metrekare</label>
+                            <select class="form-select">
+                                <option selected>Tümü</option>
+                                <option>0 - 100 m²</option>
+                                <option>100 - 200 m²</option>
+                                <option>200 - 500 m²</option>
+                                <option>500 m² ve üzeri</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Property Listings -->
+            <div class="col-lg-9">
+                <div class="row">
+                    <!-- Property Card 1 -->
+                    <div class="col-md-6" data-aos="fade-up">
+                        <div class="property-card">
+                            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Modern Ofis" class="property-image">
+                            <div class="property-content">
+                                <h3 class="property-title">Modern Ofis Katı</h3>
+                                <p class="property-location">
+                                    <i class="fas fa-map-marker-alt"></i> Cumhuriyet Mahallesi
+                                </p>
+                                <div class="property-features">
+                                    <span class="feature">
+                                        <i class="fas fa-ruler-combined"></i> 150m²
+                                    </span>
+                                    <span class="feature">
+                                        <i class="fas fa-building"></i> Ofis
+                                    </span>
+                                    <span class="feature">
+                                        <i class="fas fa-parking"></i> Otopark
+                                    </span>
+                                </div>
+                                <div class="property-price">2.500.000 TL</div>
+                                <a href="#" class="property-btn">İncele</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Property Card 2 -->
+                    <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+                        <div class="property-card">
+                            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Cadde Üzeri Dükkan" class="property-image">
+                            <div class="property-content">
+                                <h3 class="property-title">Cadde Üzeri Dükkan</h3>
+                                <p class="property-location">
+                                    <i class="fas fa-map-marker-alt"></i> Yeni Mahalle
+                                </p>
+                                <div class="property-features">
+                                    <span class="feature">
+                                        <i class="fas fa-ruler-combined"></i> 80m²
+                                    </span>
+                                    <span class="feature">
+                                        <i class="fas fa-store"></i> Dükkan
+                                    </span>
+                                    <span class="feature">
+                                        <i class="fas fa-road"></i> Ana Cadde
+                                    </span>
+                                </div>
+                                <div class="property-price">1.750.000 TL</div>
+                                <a href="#" class="property-btn">İncele</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Property Card 3 -->
+                    <div class="col-md-6" data-aos="fade-up" data-aos-delay="400">
+                        <div class="property-card">
+                            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Depo" class="property-image">
+                            <div class="property-content">
+                                <h3 class="property-title">Geniş Depo</h3>
+                                <p class="property-location">
+                                    <i class="fas fa-map-marker-alt"></i> Karşıyaka Mahallesi
+                                </p>
+                                <div class="property-features">
+                                    <span class="feature">
+                                        <i class="fas fa-ruler-combined"></i> 500m²
+                                    </span>
+                                    <span class="feature">
+                                        <i class="fas fa-warehouse"></i> Depo
+                                    </span>
+                                    <span class="feature">
+                                        <i class="fas fa-truck"></i> Yükleme
+                                    </span>
+                                </div>
+                                <div class="property-price">3.250.000 TL</div>
+                                <a href="#" class="property-btn">İncele</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Property Card 4 -->
+                    <div class="col-md-6" data-aos="fade-up" data-aos-delay="600">
+                        <div class="property-card">
+                            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Plaza Katı" class="property-image">
+                            <div class="property-content">
+                                <h3 class="property-title">Plaza Katı</h3>
+                                <p class="property-location">
+                                    <i class="fas fa-map-marker-alt"></i> Fatih Sultan Mehmet Mahallesi
+                                </p>
+                                <div class="property-features">
+                                    <span class="feature">
+                                        <i class="fas fa-ruler-combined"></i> 300m²
+                                    </span>
+                                    <span class="feature">
+                                        <i class="fas fa-building"></i> Plaza
+                                    </span>
+                                    <span class="feature">
+                                        <i class="fas fa-elevator"></i> Asansör
+                                    </span>
+                                </div>
+                                <div class="property-price">4.500.000 TL</div>
+                                <a href="#" class="property-btn">İncele</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+    </script>
+</body>
+</html> 

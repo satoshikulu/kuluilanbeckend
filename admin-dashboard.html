@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Kulu Emlak</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: var(--dark-bg) !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stats-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 15px 0;
+        }
+
+        .listing-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .listing-image {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .listing-price {
+            color: var(--accent-color);
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .btn-action {
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+        }
+
+        .modal-header {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            border-color: var(--secondary-color);
+        }
+
+        #loginForm {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #adminContent {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-home me-2"></i>Kulu Emlak Admin Panel
+            </a>
+            <button class="btn btn-outline-light" onclick="handleLogout()" id="logoutButton" style="display: none;">
+                <i class="fas fa-sign-out-alt me-1"></i>Çıkış Yap
+            </button>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Login Form -->
+        <div id="loginForm">
+            <h2 class="text-center mb-4">Admin Girişi</h2>
+            <form id="adminLoginForm">
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="username" required 
+                           placeholder="admin@kuluilan.com">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Şifre</label>
+                    <input type="password" class="form-control" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+            </form>
+        </div>
+
+        <!-- Admin Content -->
+        <div id="adminContent">
+            <!-- Stats Section -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <i class="fas fa-home fa-2x mb-3 text-primary"></i>
+                        <div class="stats-number" id="toplamIlan">0</div>
+                        <div>Toplam İlan</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <i class="fas fa-check-circle fa-2x mb-3 text-success"></i>
+                        <div class="stats-number" id="onayliIlan">0</div>
+                        <div>Onaylı İlan</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <i class="fas fa-clock fa-2x mb-3 text-warning"></i>
+                        <div class="stats-number" id="bekleyenIlan">0</div>
+                        <div>Bekleyen İlan</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <i class="fas fa-users fa-2x mb-3 text-info"></i>
+                        <div class="stats-number" id="toplamKullanici">0</div>
+                        <div>Toplam Kullanıcı</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kullanıcılar Listesi -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-users me-2"></i>Kayıtlı Kullanıcılar
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Kayıt Tarihi</th>
+                                    <th>Son Giriş</th>
+                                    <th>Durum</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="kullanicilarListesi">
+                                <!-- Kullanıcılar buraya eklenecek -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="search-box">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <select class="form-select" id="kategoriFilter">
+                            <option value="">Tüm Kategoriler</option>
+                            <option value="Satılık">Satılık</option>
+                            <option value="Kiralık">Kiralık</option>
+                            <option value="Arsa">Arsa</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="onayDurumuFilter">
+                            <option value="">Tüm Durumlar</option>
+                            <option value="onayli">Onaylı</option>
+                            <option value="beklemede">Onay Bekleyen</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" id="searchInput" placeholder="İlan ara...">
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary w-100" onclick="applyFilters()">
+                            <i class="fas fa-search me-1"></i>Ara
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Listings Section -->
+            <div class="row" id="listingsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Edit Listing Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">İlan Düzenle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <input type="hidden" id="editIlanId">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Başlık</label>
+                                <input type="text" class="form-control" id="editBaslik" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Fiyat</label>
+                                <input type="number" class="form-control" id="editFiyat" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Kategori</label>
+                                <select class="form-select" id="editKategori" required>
+                                    <option value="Satılık">Satılık</option>
+                                    <option value="Kiralık">Kiralık</option>
+                                    <option value="Arsa">Arsa</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Durum</label>
+                                <select class="form-select" id="editDurum">
+                                    <option value="onayli">Onaylı</option>
+                                    <option value="beklemede">Onay Bekliyor</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Açıklama</label>
+                            <textarea class="form-control" id="editAciklama" rows="4" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEdit()">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        // Firebase yapılandırması
+        const firebaseConfig = {
+            apiKey: "AIzaSyCOw_AAy7WWU1SU1Cj0isvMJSaZRbg4L_k",
+            authDomain: "kulu-emlak.firebaseapp.com",
+            projectId: "kulu-emlak",
+            storageBucket: "kulu-emlak.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:1234567890123456789012"
+        };
+
+        // Firebase'i başlat
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const API_URL = 'http://localhost:3001/api';
+        let editModal;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Sayfa yüklendi');
+            editModal = new bootstrap.Modal(document.getElementById('editModal'));
+            
+            // Check if user is already logged in
+            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+            console.log('Giriş durumu:', isLoggedIn);
+            
+            if (isLoggedIn === 'true') {
+                showAdminPanel();
+            }
+
+            // Setup event listeners
+            const loginForm = document.getElementById('adminLoginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleAdminLogin);
+                console.log('Login form event listener eklendi');
+            } else {
+                console.error('Login form bulunamadı!');
+            }
+
+            fetchKullanicilar();
+        });
+
+        async function handleAdminLogin(e) {
+            e.preventDefault();
+            console.log('Login form submit edildi');
+            
+            const email = document.querySelector('input[name="username"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+
+            try {
+                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                console.log('Giriş başarılı:', userCredential.user);
+                
+                // Admin kontrolü
+                if (email === 'satoshinakamototokyo42@gmail.com') {
+                    localStorage.setItem('adminLoggedIn', 'true');
+                    showAdminPanel();
+                } else {
+                    alert('Bu sayfaya erişim yetkiniz yok.');
+                }
+            } catch (error) {
+                console.error('Giriş hatası:', error);
+                alert('Giriş başarısız: ' + error.message);
+            }
+        }
+
+        function showAdminPanel() {
+            console.log('Admin panel gösteriliyor');
+            try {
+                const loginForm = document.getElementById('loginForm');
+                const adminContent = document.getElementById('adminContent');
+                const logoutButton = document.getElementById('logoutButton');
+
+                if (loginForm) loginForm.style.display = 'none';
+                if (adminContent) adminContent.style.display = 'block';
+                if (logoutButton) logoutButton.style.display = 'block';
+
+                console.log('Panel elementleri güncellendi');
+                
+                // İstatistikleri ve listeleri yükle
+                fetchListings();
+                fetchStats();
+            } catch (error) {
+                console.error('Panel gösterilirken hata:', error);
+                alert('Panel yüklenirken bir hata oluştu! Lütfen sayfayı yenileyin.');
+            }
+        }
+
+        async function fetchStats() {
+            try {
+                console.log('İstatistikler yükleniyor');
+                const response = await fetch(`${API_URL}/istatistikler`);
+                const stats = await response.json();
+                
+                document.getElementById('toplamIlan').textContent = stats.toplamIlan || 0;
+                document.getElementById('onayliIlan').textContent = stats.onayliIlan || 0;
+                document.getElementById('bekleyenIlan').textContent = (stats.toplamIlan - stats.onayliIlan) || 0;
+                document.getElementById('toplamKullanici').textContent = stats.toplamKullanici || 0;
+                
+                console.log('İstatistikler yüklendi:', stats);
+            } catch (error) {
+                console.error('İstatistikler yüklenirken hata:', error);
+            }
+        }
+
+        async function fetchListings(filters = {}) {
+            try {
+                console.log('İlanlar yükleniyor');
+                const queryParams = new URLSearchParams(filters).toString();
+                const response = await fetch(`${API_URL}/ilanlar?${queryParams}`);
+                const listings = await response.json();
+                displayListings(listings);
+                console.log('İlanlar yüklendi:', listings.length);
+            } catch (error) {
+                console.error('İlanlar yüklenirken hata:', error);
+            }
+        }
+
+        function displayListings(listings) {
+            console.log('İlanlar gösteriliyor');
+            const container = document.getElementById('listingsContainer');
+            if (!container) {
+                console.error('Listings container bulunamadı!');
+                return;
+            }
+
+            container.innerHTML = listings.map(listing => `
+                <div class="col-md-4">
+                    <div class="listing-card">
+                        <img src="${listing.media ? `http://localhost:3001/uploads/${listing.media.split(',')[0]}` : 'https://via.placeholder.com/300x200'}" 
+                             class="listing-image" alt="${listing.baslik}">
+                        <div class="card-body">
+                            <h5 class="card-title">${listing.baslik}</h5>
+                            <p class="listing-price">${listing.fiyat.toLocaleString()} TL</p>
+                            <p class="card-text">
+                                <i class="fas fa-map-marker-alt me-1"></i>${listing.ilce || 'Belirtilmemiş'} ${listing.mahalle ? `- ${listing.mahalle}` : ''}
+                            </p>
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-primary btn-action" onclick="editListing('${listing.id}')">
+                                    <i class="fas fa-edit me-1"></i>Düzenle
+                                </button>
+                                <button class="btn btn-danger btn-action" onclick="deleteListing('${listing.id}')">
+                                    <i class="fas fa-trash me-1"></i>Sil
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            console.log('İlanlar gösterildi');
+        }
+
+        async function handleLogout() {
+            if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
+                console.log('Çıkış yapılıyor');
+                localStorage.removeItem('adminLoggedIn');
+                window.location.reload();
+            }
+        }
+
+        async function editListing(id) {
+            try {
+                const response = await fetch(`${API_URL}/ilan/${id}`);
+                const listing = await response.json();
+                
+                document.getElementById('editIlanId').value = id;
+                document.getElementById('editBaslik').value = listing.baslik;
+                document.getElementById('editFiyat').value = listing.fiyat;
+                document.getElementById('editKategori').value = listing.kategori;
+                document.getElementById('editDurum').value = listing.onayli ? 'onayli' : 'beklemede';
+                document.getElementById('editAciklama').value = listing.aciklama;
+                
+                editModal.show();
+            } catch (error) {
+                console.error('İlan yüklenirken hata:', error);
+            }
+        }
+
+        function updateStats(listings) {
+            document.getElementById('toplamIlan').textContent = listings.length;
+            document.getElementById('onayliIlan').textContent = listings.filter(l => l.onayli).length;
+            document.getElementById('bekleyenIlan').textContent = listings.filter(l => !l.onayli).length;
+        }
+
+        window.saveEdit = async () => {
+            const id = document.getElementById('editIlanId').value;
+            const updates = {
+                baslik: document.getElementById('editBaslik').value,
+                fiyat: Number(document.getElementById('editFiyat').value),
+                kategori: document.getElementById('editKategori').value,
+                onayli: document.getElementById('editDurum').value === 'onayli',
+                aciklama: document.getElementById('editAciklama').value
+            };
+
+            try {
+                const docRef = doc(db, "ilanlar", id);
+                await updateDoc(docRef, updates);
+                editModal.hide();
+                fetchListings();
+                alert('İlan başarıyla güncellendi!');
+            } catch (error) {
+                console.error("İlan güncellenirken hata:", error);
+                alert('İlan güncellenirken bir hata oluştu!');
+            }
+        };
+
+        window.deleteListing = async (id) => {
+            if (!confirm('Bu ilanı silmek istediğinizden emin misiniz?')) return;
+
+            try {
+                const docRef = doc(db, "ilanlar", id);
+                await deleteDoc(docRef);
+                fetchListings();
+                alert('İlan başarıyla silindi!');
+            } catch (error) {
+                console.error("İlan silinirken hata:", error);
+                alert('İlan silinirken bir hata oluştu!');
+            }
+        };
+
+        window.applyFilters = () => {
+            const filters = {
+                kategori: document.getElementById('kategoriFilter').value,
+                onayDurumu: document.getElementById('onayDurumuFilter').value
+            };
+            fetchListings(filters);
+        };
+
+        // Kullanıcıları getir
+        async function fetchKullanicilar() {
+            try {
+                const response = await fetch(`${API_URL}/kullanicilar`);
+                const kullanicilar = await response.json();
+                displayKullanicilar(kullanicilar);
+            } catch (error) {
+                console.error('Kullanıcılar yüklenirken hata:', error);
+            }
+        }
+
+        // Kullanıcıları göster
+        function displayKullanicilar(kullanicilar) {
+            const container = document.getElementById('kullanicilarListesi');
+            container.innerHTML = kullanicilar.map(kullanici => `
+                <tr>
+                    <td>${kullanici.email}</td>
+                    <td>${new Date(kullanici.createdAt).toLocaleString('tr-TR')}</td>
+                    <td>${kullanici.lastLoginAt ? new Date(kullanici.lastLoginAt).toLocaleString('tr-TR') : 'Henüz giriş yapmadı'}</td>
+                    <td>
+                        <span class="badge ${kullanici.emailVerified ? 'bg-success' : 'bg-warning'}">
+                            ${kullanici.emailVerified ? 'Onaylı' : 'Onay Bekliyor'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="deleteUser('${kullanici.uid}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Kullanıcı sil
+        async function deleteUser(uid) {
+            if (!confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/kullanici/${uid}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    alert('Kullanıcı başarıyla silindi!');
+                    fetchKullanicilar();
+                    fetchStats();
+                } else {
+                    alert('Kullanıcı silinirken bir hata oluştu!');
+                }
+            } catch (error) {
+                console.error('Hata:', error);
+                alert('Bir hata oluştu!');
+            }
+        }
+
+        // Initialize the dashboard
+        fetchListings();
+    </script>
+</body>
+</html> 
