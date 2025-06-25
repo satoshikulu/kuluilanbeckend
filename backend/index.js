@@ -7,16 +7,28 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
+// Route import (to be created)
+const ilanRoutes = require('./routes/ilan');
+app.use('/api/ilanlar', ilanRoutes);
 
-// Supabase client
+const PORT = process.env.PORT || 3001;
+
+// Supabase bağlantısı
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-app.get('/', (req, res) => {
-  res.send('API Çalışıyor');
+app.get('/', async (req, res) => {
+  // Basit bir test: Supabase bağlantısı var mı?
+  try {
+    // Basit bir sorgu ile bağlantı testi (ör: boş bir tabloya select)
+    // const { data, error } = await supabase.from('ilanlar').select('*').limit(1);
+    // if (error) throw error;
+    res.send('Supabase bağlantısı başarılı');
+  } catch (err) {
+    res.status(500).send('Supabase bağlantı hatası: ' + err.message);
+  }
 });
 
 app.post('/ilan-ekle', async (req, res) => {
@@ -68,5 +80,5 @@ app.patch('/ilan-onayla', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 }); 
