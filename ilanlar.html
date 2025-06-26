@@ -26,20 +26,10 @@
             font-weight: 700;
         }
         .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 2rem;
-        }
-        .kiralik-cards {
-            margin-top: 3rem;
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
             gap: 2rem;
-            flex-wrap: wrap;
-        }
-        .kiralik-cards .ilan-card {
-            min-width: 260px;
-            max-width: 320px;
         }
         .ilan-card {
             background: #fff;
@@ -53,29 +43,12 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
-        }
-        .ilan-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(120deg, #ffb300 0%, #ff6b00 100%);
-            opacity: 0;
-            z-index: 0;
-            transition: opacity 0.3s;
+            min-width: 260px;
+            max-width: 320px;
         }
         .ilan-card:hover {
             transform: translateY(-10px) scale(1.03);
             box-shadow: 0 16px 40px rgba(255,107,0,0.18);
-        }
-        .ilan-card:hover::before {
-            opacity: 0.13;
-        }
-        .ilan-card:hover .ilan-icon {
-            color: #ff6b00;
-            transform: scale(1.18) rotate(-8deg);
-        }
-        .ilan-card:hover .ilan-title {
-            color: #ff6b00;
         }
         .ilan-icon {
             font-size: 2.8rem;
@@ -101,83 +74,79 @@
         }
         @media (max-width: 700px) {
             .cards {
-                grid-template-columns: 1fr;
-            }
-            .kiralik-cards {
                 flex-direction: column;
                 align-items: center;
             }
         }
+        .back-btn {
+            display:inline-block;
+            padding:0.7rem 2.2rem;
+            background:linear-gradient(90deg,#ffb300,#ff6b00);
+            color:#fff;
+            font-weight:600;
+            border-radius:24px;
+            text-decoration:none;
+            box-shadow:0 2px 8px rgba(255,107,0,0.10);
+            font-size:1.1rem;
+            transition:background 0.2s,transform 0.2s;
+            margin: 2rem auto 1.5rem auto;
+        }
+        .back-btn:hover {
+            background:linear-gradient(90deg,#ff6b00,#ffb300);
+            color:#fff;
+            transform:translateY(-2px);
+        }
+        .center {
+            width:100%;
+            text-align:center;
+        }
     </style>
 </head>
 <body>
-    <div style="width:100%;text-align:center;margin-top:2rem;margin-bottom:1.5rem;">
-        <a href="index.html" style="display:inline-block;padding:0.7rem 2.2rem;background:linear-gradient(90deg,#ffb300,#ff6b00);color:#fff;font-weight:600;border-radius:24px;text-decoration:none;box-shadow:0 2px 8px rgba(255,107,0,0.10);font-size:1.1rem;transition:background 0.2s,transform 0.2s;">
+    <div class="center">
+        <a href="index.html" class="back-btn">
             <i class="fas fa-home" style="margin-right:0.5rem;"></i>Ana Sayfa'ya Dön
         </a>
     </div>
     <div class="container">
-        <h1>İlanlar</h1>
-        <div id="ilanlar-listesi" class="cards"></div>
+        <h1>İlan Kategorileri</h1>
+        <div class="cards">
+            <a href="satilik-evler.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-home ilan-icon"></i>
+                <div class="ilan-title">Satılık Evler</div>
+                <div class="ilan-desc">Hayalinizdeki evi bulun, modern ve güvenli yaşam alanları.</div>
+            </a>
+            <a href="satilik-arsalar.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-map-marked-alt ilan-icon"></i>
+                <div class="ilan-title">Satılık Arsalar</div>
+                <div class="ilan-desc">Yatırımlık ve imarlı arsalar ile geleceğe yatırım yapın.</div>
+            </a>
+            <a href="satilik-isyerleri.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-store ilan-icon"></i>
+                <div class="ilan-title">Satılık İşyerleri</div>
+                <div class="ilan-desc">İşinizi büyütecek merkezi ve avantajlı işyerleri.</div>
+            </a>
+            <a href="satilik-tarlalar.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-tractor ilan-icon"></i>
+                <div class="ilan-title">Satılık Tarla</div>
+                <div class="ilan-desc">Verimli tarlalar ile tarımsal yatırım fırsatları.</div>
+            </a>
+            <a href="kiralik-evler.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-key ilan-icon"></i>
+                <div class="ilan-title">Kiralık Evler</div>
+                <div class="ilan-desc">Farklı bütçelere uygun, konforlu kiralık ev seçenekleri.</div>
+            </a>
+            <a href="kiralik-isyerleri.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-briefcase ilan-icon"></i>
+                <div class="ilan-title">Kiralık İşyerleri</div>
+                <div class="ilan-desc">İşinizi başlatmak için uygun kiralık işyeri alternatifleri.</div>
+            </a>
+            <a href="kiralik-tarlalar.html" class="ilan-card" style="text-decoration:none;">
+                <i class="fas fa-seedling ilan-icon"></i>
+                <div class="ilan-title">Kiralık Tarla</div>
+                <div class="ilan-desc">Kiralık tarla seçenekleri ile tarımsal faaliyetlerinize alan açın.</div>
+            </a>
+        </div>
     </div>
-    <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-    // Supabase bilgilerinizi buraya ekleyin
-    const supabaseUrl = 'VITE_SUPABASE_URL'; // .env'den alınacak şekilde değiştirin
-    const supabaseKey = 'VITE_SUPABASE_ANON_KEY';
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    // Query parametrelerini al
-    const params = new URLSearchParams(window.location.search);
-    let kategori = params.get('kategori') || '';
-    let mahalle = params.get('mahalle') || '';
-
-    // Normalize fonksiyonu: trim, küçük harfe çevir, Türkçe karakter düzeltmesi
-    function normalize(str) {
-        return (str || '')
-            .toLowerCase()
-            .replace(/i/g, 'ı')
-            .replace(/İ/g, 'i')
-            .replace(/ş/g, 's')
-            .replace(/ç/g, 'c')
-            .replace(/ö/g, 'o')
-            .replace(/ü/g, 'u')
-            .replace(/ğ/g, 'g')
-            .replace(/\s+/g, ' ')
-            .trim();
-    }
-    kategori = normalize(kategori);
-    mahalle = normalize(mahalle);
-
-    async function ilanlariGetir() {
-        let query = supabase.from('ilanlar').select('*');
-        if (kategori) query = query.ilike('kategori', `%${kategori}%`);
-        if (mahalle) query = query.ilike('mahalle', `%${mahalle}%`);
-        const { data, error } = await query;
-        const container = document.getElementById('ilanlar-listesi');
-        container.innerHTML = '';
-        if (error) {
-            container.innerHTML = `<div style="color:red">Bir hata oluştu: ${error.message}</div>`;
-            return;
-        }
-        if (!data || data.length === 0) {
-            container.innerHTML = '<div>Sonuç bulunamadı.</div>';
-            return;
-        }
-        data.forEach(ilan => {
-            const img = (ilan.media || '').split(',')[0]?.trim() || 'https://via.placeholder.com/320x200?text=İlan';
-            const card = document.createElement('div');
-            card.className = 'ilan-card';
-            card.innerHTML = `
-                <img src="${img}" alt="${ilan.baslik}" style="width:100%;max-width:320px;height:200px;object-fit:cover;border-radius:12px 12px 0 0;">
-                <div class="ilan-title">${ilan.baslik}</div>
-                <div class="ilan-desc">${ilan.mahalle} | ${ilan.kategori}</div>
-                <div style="font-weight:bold;color:#ff6b00;font-size:1.2rem;margin-top:0.5rem;">${ilan.fiyat} TL</div>
-            `;
-            container.appendChild(card);
-        });
-    }
-    ilanlariGetir();
-    </script>
 </body>
 </html> 
