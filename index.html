@@ -382,6 +382,7 @@
             animation-fill-mode: both;
             max-width: 800px;
             margin: 0 auto;
+            margin-top: 2.5rem;
         }
 
         .form-select, .form-control {
@@ -788,10 +789,6 @@
                             <i class="fas fa-key"></i>
                             Kiralık Evler
                         </a>
-                        <a href="kiralik-arsalar.html" class="hero-btn">
-                            <i class="fas fa-map-marked-alt"></i>
-                            Kiralık Arsalar
-                        </a>
                         <a href="kiralik-isyerleri.html" class="hero-btn">
                             <i class="fas fa-store"></i>
                             Kiralık İşyerleri
@@ -805,7 +802,7 @@
 
                 <!-- Search Box -->
                 <div class="search-box" data-aos="fade-up" data-aos-delay="500">
-                    <form class="row g-3">
+                    <form class="row g-3" onsubmit="aramaYap(event)">
             <div class="col-md-4">
                             <select class="form-select" id="category">
                                 <option selected>Kategori Seçin</option>
@@ -822,7 +819,7 @@
                             </select>
             </div>
             <div class="col-md-4">
-                            <select class="form-select">
+                            <select class="form-select" id="mahalle">
                                 <option selected disabled>Mahalle Seçin</option>
                                 <option value="acikuyu">AÇIKUYU MAHALLESİ</option>
                                 <option value="alparslan">ALPARSLAN MAHALLESİ</option>
@@ -979,6 +976,24 @@
 
         // Start typewriter effect when page loads
         window.addEventListener('load', typeWriter);
+
+        function aramaYap(event) {
+            event.preventDefault();
+            const kategori = document.getElementById('category').value;
+            const mahalle = document.getElementById('mahalle').value;
+            if (kategori === 'Kategori Seçin' || !kategori || mahalle === 'Mahalle Seçin' || !mahalle) {
+                alert('Lütfen kategori ve mahalle seçiniz.');
+                return;
+            }
+            const params = `?kategori=${encodeURIComponent(kategori)}&mahalle=${encodeURIComponent(mahalle)}`;
+            const currentPath = window.location.pathname;
+            if (currentPath.endsWith('index.html') || currentPath === '/' || currentPath === '') {
+                window.location.href = 'ilanlar.html' + params;
+            } else {
+                const page = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+                window.location.href = page + params;
+            }
+        }
     </script>
 </body>
-</html> 
+</html>

@@ -2,13 +2,35 @@ const express = require('express');
 const router = express.Router();
 const supabase = require('../supabase');
 
-// GET /api/ilanlar - Tüm ilanları getir
+// GET /api/ilanlar - Tüm ilanları getir (filtreli)
 router.get('/', async (req, res) => {
   try {
-    const { data, error } = await supabase
-      .from('ilanlar')
-      .select('*')
-      .order('created_at', { ascending: false });
+    let { kategori, mahalle } = req.query;
+    // Normalize fonksiyonu: trim, küçük harfe çevir, Türkçe karakter düzeltmesi
+    function normalize(str) {
+      return (str || '')
+        .toLowerCase()
+        .replace(/i/g, 'ı')
+        .replace(/İ/g, 'i')
+        .replace(/ş/g, 's')
+        .replace(/ç/g, 'c')
+        .replace(/ö/g, 'o')
+        .replace(/ü/g, 'u')
+        .replace(/ğ/g, 'g')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+    let query = supabase.from('ilanlar').select('*');
+    if (kategori) {
+      kategori = normalize(kategori);
+      query = query.ilike('kategori', `%${kategori}%`);
+    }
+    if (mahalle) {
+      mahalle = normalize(mahalle);
+      query = query.ilike('mahalle', `%${mahalle}%`);
+    }
+    query = query.order('created_at', { ascending: false });
+    const { data, error } = await query;
     if (error) throw error;
     res.json(data);
   } catch (err) {

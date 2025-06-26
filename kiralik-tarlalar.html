@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satılık İşyerleri - Kulu Emlak Pazarı</title>
+    <title>Kiralık Tarlalar - Kulu Emlak Pazarı</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         :root {
             --primary-color: #2c3e50;
-            --secondary-color: #e74c3c;
+            --secondary-color: #e67e22;
             --accent-color: #3498db;
             --light-bg: #f8f9fa;
             --dark-bg: #1a1a1a;
-            --gradient-primary: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            --gradient-secondary: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+            --gradient-primary: linear-gradient(135deg, #e67e22 0%, #f1c40f 100%);
+            --gradient-secondary: linear-gradient(135deg, #f1c40f 0%, #e67e22 100%);
             --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
             --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
             --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
@@ -23,37 +23,32 @@
             --font-heading: 'Poppins', sans-serif;
             --font-body: 'Inter', sans-serif;
         }
-
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
-
         body {
             font-family: var(--font-body);
             background-color: var(--light-bg);
             color: var(--primary-color);
         }
-
-        /* Navbar Styles */
         .navbar {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             padding: 1rem 0;
             box-shadow: var(--shadow-sm);
         }
-
         .navbar-brand {
             font-family: var(--font-heading);
             font-weight: 600;
             font-size: 1.5rem;
             color: var(--primary-color);
         }
-
         .nav-link {
             font-weight: 500;
             color: var(--primary-color);
             margin: 0 0.5rem;
         }
-
-        /* Page Header */
+        .nav-link.active {
+            color: var(--secondary-color);
+        }
         .page-header {
             background: var(--gradient-primary);
             padding: 100px 0 50px;
@@ -61,7 +56,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .page-header::before {
             content: '';
             position: absolute;
@@ -69,23 +63,19 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
+            background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
             opacity: 0.1;
         }
-
         .page-title {
             font-family: var(--font-heading);
             font-size: 3rem;
             font-weight: 600;
             margin-bottom: 1rem;
         }
-
         .page-subtitle {
             font-size: 1.2rem;
             opacity: 0.9;
         }
-
-        /* Property Card */
         .property-card {
             background: white;
             border-radius: 15px;
@@ -94,56 +84,35 @@
             transition: var(--transition);
             margin-bottom: 30px;
         }
-
         .property-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
         }
-
         .property-image {
             width: 100%;
             height: 250px;
             object-fit: cover;
         }
-
         .property-content {
             padding: 1.5rem;
         }
-
         .property-title {
             font-family: var(--font-heading);
             font-size: 1.25rem;
             margin-bottom: 0.5rem;
             color: var(--primary-color);
         }
-
         .property-location {
             color: #6c757d;
             font-size: 0.9rem;
             margin-bottom: 1rem;
         }
-
-        .property-features {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-
         .property-price {
             font-size: 1.5rem;
             font-weight: 600;
             color: var(--secondary-color);
             margin-bottom: 1rem;
         }
-
         .property-btn {
             background: var(--gradient-primary);
             color: white;
@@ -156,14 +125,11 @@
             width: 100%;
             text-align: center;
         }
-
         .property-btn:hover {
             background: var(--gradient-secondary);
             color: white;
             transform: translateY(-2px);
         }
-
-        /* Filters */
         .filters {
             background: white;
             padding: 1.5rem;
@@ -171,25 +137,21 @@
             box-shadow: var(--shadow-sm);
             margin-bottom: 30px;
         }
-
         .filter-title {
             font-family: var(--font-heading);
             font-size: 1.25rem;
             margin-bottom: 1rem;
             color: var(--primary-color);
         }
-
         .form-label {
             font-weight: 500;
             color: var(--primary-color);
         }
-
         .form-select, .form-control {
             border: 1px solid #dee2e6;
             border-radius: 10px;
             padding: 0.75rem;
         }
-
         .form-select:focus, .form-control:focus {
             border-color: var(--accent-color);
             box-shadow: none;
@@ -206,36 +168,22 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Ana Sayfa</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="satilik-evler.html">Satılık Evler</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="satilik-arsalar.html">Satılık Arsalar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="satilik-isyerleri.html">Satılık İşyerleri</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="kiralik-evler.html">Kiralık Evler</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Ana Sayfa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="satilik-evler.html">Satılık Evler</a></li>
+                    <li class="nav-item"><a class="nav-link" href="satilik-arsalar.html">Satılık Arsalar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="satilik-isyerleri.html">Satılık İşyerleri</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="kiralik-tarlalar.html">Kiralık Tarlalar</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
     <!-- Page Header -->
     <header class="page-header">
         <div class="container">
-            <h1 class="page-title" data-aos="fade-up">Satılık İşyerleri</h1>
-            <p class="page-subtitle" data-aos="fade-up" data-aos-delay="200">
-                İşinizi büyütmek için ideal mekanlar
-            </p>
+            <h1 class="page-title" data-aos="fade-up">Kiralık Tarlalar</h1>
+            <p class="page-subtitle" data-aos="fade-up" data-aos-delay="200">Kulu ve çevresinde kiralık tarla ilanları</p>
         </div>
     </header>
-
     <!-- Main Content -->
     <main class="container py-5">
         <div class="row">
@@ -243,21 +191,20 @@
             <div class="col-lg-3">
                 <div class="filters" data-aos="fade-right">
                     <h3 class="filter-title">Filtreler</h3>
-                    <form id="filter-form" onsubmit="aramaYap(event)">
-                        <input type="hidden" name="kategori" value="satilik isyeri">
+                    <form id="filter-form">
                         <div class="mb-3">
-                            <label class="form-label">Fiyat Aralığı</label>
-                            <select class="form-select" id="fiyat" name="fiyat">
+                            <label class="form-label">Kira Bedeli</label>
+                            <select class="form-select" id="fiyat">
                                 <option value="">Tümü</option>
-                                <option value="0-500000">0 - 500.000 TL</option>
-                                <option value="500000-1000000">500.000 - 1.000.000 TL</option>
-                                <option value="1000000-2000000">1.000.000 - 2.000.000 TL</option>
-                                <option value="2000000-">2.000.000 TL ve üzeri</option>
+                                <option value="0-2000">0 - 2.000 TL</option>
+                                <option value="2000-4000">2.000 - 4.000 TL</option>
+                                <option value="4000-6000">4.000 - 6.000 TL</option>
+                                <option value="6000-">6.000 TL ve üzeri</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Mahalle</label>
-                            <select class="form-select" id="mahalle" name="mahalle">
+                            <select class="form-select" id="mahalle">
                                 <option value="">Tümü</option>
                                 <option value="acikuyu">AÇIKUYU MAHALLESİ</option>
                                 <option value="alparslan">ALPARSLAN MAHALLESİ</option>
@@ -307,36 +254,106 @@
                                 <option value="zincirlikuyu">ZİNCİRLİKUYU MAHALLESİ</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Metrekare</label>
-                            <select class="form-select" id="metrekare" name="metrekare">
-                                <option value="">Tümü</option>
-                                <option value="0-100">0 - 100 m²</option>
-                                <option value="100-200">100 - 200 m²</option>
-                                <option value="200-500">200 - 500 m²</option>
-                                <option value="500-">500 m² ve üzeri</option>
-                            </select>
-                        </div>
                         <button type="submit" class="btn btn-primary w-100">Filtrele</button>
                     </form>
                 </div>
             </div>
-
             <!-- Property Listings -->
             <div class="col-lg-9">
                 <div class="row" id="property-list"></div>
             </div>
         </div>
     </main>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script type="module" src="frontend/filter.js"></script>
-    <script>
-        AOS.init({
-            duration: 1000,
-            once: true
+    <script type="module">
+        AOS.init({ duration: 1000, once: true });
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+        const supabaseUrl = 'VITE_SUPABASE_URL'; // .env'den alınacak şekilde değiştirin
+        const supabaseKey = 'VITE_SUPABASE_ANON_KEY';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        // Filtreleme fonksiyonu
+        async function fetchTarlalar() {
+            const mahalle = document.getElementById('mahalle').value;
+            const fiyat = document.getElementById('fiyat').value;
+            let query = supabase.from('ilanlar').select('*').ilike('kategori', '%kiralik tarla%');
+            if (mahalle) query = query.ilike('mahalle', `%${mahalle}%`);
+            if (fiyat) {
+                const [min, max] = fiyat.split('-');
+                if (min) query = query.gte('fiyat', Number(min));
+                if (max) query = query.lte('fiyat', Number(max));
+            }
+            const { data, error } = await query;
+            const list = document.getElementById('property-list');
+            list.innerHTML = '';
+            if (error) {
+                list.innerHTML = `<div class='text-danger'>Bir hata oluştu: ${error.message}</div>`;
+                return;
+            }
+            if (!data || data.length === 0) {
+                list.innerHTML = '<div>Sonuç bulunamadı.</div>';
+                // Örnek ilanlar:
+                const ornekler = [
+                  {
+                    baslik: 'Geniş Kiralık Tarla',
+                    mahalle: 'Cumhuriyet Mahallesi',
+                    fiyat: '3.000',
+                    img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                  },
+                  {
+                    baslik: 'Sulak Arazi',
+                    mahalle: 'Yeni Mahalle',
+                    fiyat: '4.500',
+                    img: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                  },
+                  {
+                    baslik: 'Verimli Tarla',
+                    mahalle: 'Fatih Sultan Mehmet Mahallesi',
+                    fiyat: '2.200',
+                    img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                  }
+                ];
+                ornekler.forEach(ilan => {
+                  const card = document.createElement('div');
+                  card.className = 'col-md-6';
+                  card.innerHTML = `
+                    <div class="property-card" data-aos="fade-up">
+                        <img src="${ilan.img}" alt="${ilan.baslik}" class="property-image">
+                        <div class="property-content">
+                            <h3 class="property-title">${ilan.baslik}</h3>
+                            <p class="property-location"><i class="fas fa-map-marker-alt"></i> ${ilan.mahalle}</p>
+                            <div class="property-price">${ilan.fiyat} TL</div>
+                            <a href="#" class="property-btn">İncele</a>
+                        </div>
+                    </div>
+                  `;
+                  list.appendChild(card);
+                });
+                return;
+            }
+            data.forEach(ilan => {
+                const img = (ilan.media || '').split(',')[0]?.trim() || 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
+                const card = document.createElement('div');
+                card.className = 'col-md-6';
+                card.innerHTML = `
+                    <div class="property-card" data-aos="fade-up">
+                        <img src="${img}" alt="${ilan.baslik}" class="property-image">
+                        <div class="property-content">
+                            <h3 class="property-title">${ilan.baslik}</h3>
+                            <p class="property-location"><i class="fas fa-map-marker-alt"></i> ${ilan.mahalle}</p>
+                            <div class="property-price">${ilan.fiyat} TL</div>
+                            <a href="#" class="property-btn">İncele</a>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+        document.getElementById('filter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            fetchTarlalar();
         });
+        fetchTarlalar();
     </script>
 </body>
 </html> 
