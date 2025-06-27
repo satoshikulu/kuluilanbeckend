@@ -5,6 +5,7 @@ const { createClient } = require('@supabase/supabase-js');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const ilanRoutes = require('./routes/ilan');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -365,6 +366,8 @@ app.put('/ilanlar/:id/durum', async (req, res) => {
     res.status(500).json({ error: err.message || 'Bir hata oluştu' });
   }
 });
+
+app.use('/api/ilanlar', ilanRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server http://localhost:${PORT} adresinde çalışıyor`);
