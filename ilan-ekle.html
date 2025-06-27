@@ -284,6 +284,22 @@
                 Ana Sayfa
             </a>
         </div>
+        <!-- Test İlanlar Başlangıç -->
+        <div id="testIlanlar" style="display: flex; gap: 2rem; justify-content: center; margin-bottom: 2.5rem;">
+            <div style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 1.5rem; width: 320px;">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Ev" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+                <h3 style="margin-bottom: 0.5rem; color: #2c3e50;">Kiralık 2+1 Daire</h3>
+                <p style="color: #e67e22; font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem;">4.500 TL</p>
+                <p style="color: #555; font-size: 0.97rem;">Merkezi konumda, asansörlü, yeni bina. Hemen taşınmaya uygun.</p>
+            </div>
+            <div style="background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 1.5rem; width: 320px;">
+                <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80" alt="Arsa" style="width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+                <h3 style="margin-bottom: 0.5rem; color: #2c3e50;">Satılık Arsa</h3>
+                <p style="color: #e67e22; font-weight: bold; font-size: 1.1rem; margin-bottom: 0.5rem;">1.200.000 TL</p>
+                <p style="color: #555; font-size: 0.97rem;">İmarlı, köşe parsel, ana yola yakın, yatırım için ideal arsa.</p>
+            </div>
+        </div>
+        <!-- Test İlanlar Bitiş -->
         
         <!-- Ana Kategoriler -->
         <div class="category-container" id="mainCategories">
@@ -385,7 +401,7 @@
                     </div>
                     <div class="form-group">
                         <label for="fiyat">Fiyat (TL)</label>
-                        <input type="number" id="fiyat" class="form-control" required min="1">
+                        <input type="text" id="fiyat" class="form-control" required min="1" oninput="formatFiyatInput(this)">
                     </div>
                     <div class="form-group">
                         <label for="telefon">Telefon Numarası</label>
@@ -450,14 +466,16 @@
             // Form gönderimi
             ilanForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
+                let fiyatInput = document.getElementById('fiyat').value;
+                // Nokta ve virgül temizle, düz sayı yap
+                let fiyatNumber = parseInt(fiyatInput.replace(/\D/g, ''), 10);
                 const formData = {
                     kategori: selectedCategory,
                     altKategori: selectedSubCategory,
                     baslik: document.getElementById('baslik').value,
                     aciklama: document.getElementById('aciklama').value,
                     mahalle: document.getElementById('mahalle').value,
-                    fiyat: document.getElementById('fiyat').value,
+                    fiyat: fiyatNumber,
                     telefon: document.getElementById('telefon').value,
                     resimler: document.getElementById('resimler').files
                 };
@@ -480,6 +498,21 @@
                 }, 3000);
             });
         });
+
+        function formatFiyatInput(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value === '') {
+                input.value = '';
+                return;
+            }
+            let intValue = parseInt(value, 10);
+            if (isNaN(intValue)) {
+                input.value = '';
+                return;
+            }
+            // Türkçe locale ile sadece binlik ayraç (nokta) ekle
+            input.value = intValue.toLocaleString('tr-TR');
+        }
     </script>
 </body>
 </html> 
