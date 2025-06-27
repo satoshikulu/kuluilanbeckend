@@ -39,6 +39,25 @@ router.get('/', async (req, res) => {
   }
 });
 
+// POST /api/ilanlar - Yeni ilan ekle
+router.post('/', async (req, res) => {
+  try {
+    const ilan = req.body;
+    if (!ilan || Object.keys(ilan).length === 0) {
+      return res.status(400).json({ error: 'İlan verisi gerekli.' });
+    }
+    const { data, error } = await supabase
+      .from('ilanlar')
+      .insert([ilan])
+      .select();
+    if (error) throw error;
+    res.status(201).json(data[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'İlan eklenemedi.' });
+  }
+});
+
 // PATCH /api/ilanlar/onayla - Belirli bir ilanın durumunu güncelle
 router.patch('/onayla', async (req, res) => {
   try {
@@ -83,12 +102,6 @@ router.delete('/:id', async (req, res) => {
 // Basit test endpoint
 router.get('/', (req, res) => {
   res.send('İlan route çalışıyor');
-});
-
-// İlan ekleme endpoint (örnek)
-router.post('/ekle', async (req, res) => {
-  // TODO: Supabase ile ilan ekleme işlemi buraya gelecek
-  res.status(201).json({ message: 'İlan eklendi (dummy response)' });
 });
 
 module.exports = router; 
