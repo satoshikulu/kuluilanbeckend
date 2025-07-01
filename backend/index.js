@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { createClient } = require('@supabase/supabase-js');
+const { supabase } = require('./supabase');
 
 const app = express();
 app.use(cors());
@@ -12,12 +12,6 @@ const ilanRoutes = require('./routes/ilan');
 app.use('/api/ilanlar', ilanRoutes);
 
 const PORT = process.env.PORT || 3001;
-
-// Supabase bağlantısı
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
 
 app.get('/', async (req, res) => {
   // Basit bir test: Supabase bağlantısı var mı?

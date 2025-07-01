@@ -464,28 +464,75 @@
             });
 
             // Form gönderimi
-            ilanForm.addEventListener('submit', function(e) {
+            ilanForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                let fiyatInput = document.getElementById('fiyat').value;
-                // Nokta ve virgül temizle, düz sayı yap
-                let fiyatNumber = parseInt(fiyatInput.replace(/\D/g, ''), 10);
-                const formData = {
-                    kategori: selectedCategory,
-                    altKategori: selectedSubCategory,
-                    baslik: document.getElementById('baslik').value,
-                    aciklama: document.getElementById('aciklama').value,
-                    mahalle: document.getElementById('mahalle').value,
-                    fiyat: fiyatNumber,
-                    telefon: document.getElementById('telefon').value,
-                    resimler: document.getElementById('resimler').files
-                };
+                
+                try {
+                    let fiyatInput = document.getElementById('fiyat').value;
+                    // Nokta ve virgül temizle, düz sayı yap
+                    let fiyatNumber = parseInt(fiyatInput.replace(/\D/g, ''), 10);
+                    
+                    const formData = {
+                        ad: document.getElementById('baslik').value,
+                        aciklama: document.getElementById('aciklama').value,
+                        mahalle: document.getElementById('mahalle').value,
+                        fiyat: fiyatNumber,
+                        telefon: document.getElementById('telefon').value,
+                        kategori: `${selectedCategory}-${selectedSubCategory}`,
+                        konum: document.getElementById('mahalle').value // Mahalle bilgisini konum olarak da kullan
+                    };
 
-                // Console'a yazdırma (simülasyon)
-                console.log('İlan Bilgileri:', formData);
+                    console.log('İlan Bilgileri:', formData);
 
-                // Formu gizle ve başarı mesajını göster
-                ilanForm.style.display = 'none';
-                successMessage.style.display = 'block';
+                    // Backend API'ye gönder
+                    const response = await fetch('/api/ilanlar', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('supabase_token')}` // Supabase token'ı
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'İlan eklenirken bir hata oluştu');
+                    }
+
+                    const result = await response.json();
+                    console.log('İlan başarıyla eklendi:', result);
+
+                    // Formu gizle ve başarı mesajını göster
+                    ilanForm.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    successMessage.innerHTML = 'Teşekkürler! İlanınız başarıyla alındı ve onay için bekliyor.';
+
+                } catch (error) {
+                    console.error('İlan ekleme hatası:', error);
+                    
+                    // Hata mesajını göster
+                    const errorMessage = document.createElement('div');
+                    errorMessage.style.cssText = `
+                        background: #f8d7da;
+                        color: #721c24;
+                        padding: 1rem;
+                        border-radius: 5px;
+                        margin-top: 1rem;
+                        text-align: center;
+                    `;
+                    errorMessage.textContent = `Hata: ${error.message}`;
+                    
+                    ilanForm.appendChild(errorMessage);
+                    
+                    // 5 saniye sonra hata mesajını kaldır
+                    setTimeout(() => {
+                        if (errorMessage.parentNode) {
+                            errorMessage.parentNode.removeChild(errorMessage);
+                        }
+                    }, 5000);
+                    
+                    return;
+                }
 
                 // 3 saniye sonra modalı kapat
                 setTimeout(() => {

@@ -172,11 +172,26 @@ function apiKeyKontrol(req, res, next) {
 // İlan ekle
 app.post('/ilan-ekle', async (req, res) => {
   try {
-    const { ad, telefon, aciklama, resim, konum } = req.body;
+    const { ad, telefon, aciklama, resim, konum, mahalle, fiyat } = req.body;
     const durum = 'beklemede';
+    
+    // Mahalle alanı kontrolü
+    if (!mahalle || mahalle.trim() === '') {
+      return res.status(400).json({ error: 'Mahalle alanı zorunludur' });
+    }
+    
     const { data, error } = await supabase
       .from('ilanlar')
-      .insert([{ ad, telefon, aciklama, resim, konum, durum }])
+      .insert([{ 
+        ad, 
+        telefon, 
+        aciklama, 
+        resim, 
+        konum, 
+        mahalle: mahalle.trim(), 
+        fiyat,
+        durum 
+      }])
       .select();
     if (error) throw error;
     res.status(201).json({ message: 'İlan başarıyla eklendi', ilan: data[0] });
@@ -190,7 +205,7 @@ app.get('/ilanlar', async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('ilanlar')
-      .select('id, ad, telefon, aciklama, resim, konum, durum, created_at')
+      .select('id, ad, telefon, aciklama, resim, konum, mahalle, fiyat, durum, created_at')
       .order('created_at', { ascending: false });
     if (error) throw error;
     res.status(200).json(data);
