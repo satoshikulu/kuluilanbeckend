@@ -13,6 +13,8 @@ app.use('/api/ilanlar', ilanRoutes);
 
 const PORT = process.env.PORT || 3001;
 
+console.log('SUPABASE_URL:', process.env.SUPABASE_URL);
+
 app.get('/', async (req, res) => {
   // Basit bir test: Supabase bağlantısı var mı?
   try {
